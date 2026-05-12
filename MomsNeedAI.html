@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MomsNeedAI — The AI built for mom life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --blush: #F2E0D8;
+    --rose: #D4548A;
+    --rose-dark: #A8386A;
+    --plum: #2D1B2E;
+    --plum-mid: #5A3D5C;
+    --sage: #8FA68B;
+    --gold: #C8974A;
+    --off-white: #F7F3EE;
+    --text: #2D1B2E;
+    --text-muted: #7A6575;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(250,247,242,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(212,84,138,0.1);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--plum); letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--rose); }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a {
+    font-size: 14px; font-weight: 500; color: var(--text-muted);
+    text-decoration: none; letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--rose); }
+  .nav-cta {
+    background: var(--rose); color: white !important;
+    padding: 9px 22px; border-radius: 100px;
+    font-size: 13px !important; font-weight: 600 !important;
+    box-shadow: 0 4px 14px rgba(212,84,138,0.3);
+    transition: transform 0.2s, box-shadow 0.2s !important;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(212,84,138,0.4) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    padding: 120px 48px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute; top: -200px; right: -200px;
+    width: 700px; height: 700px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,84,138,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -150px; left: -100px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(143,166,139,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-left { position: relative; z-index: 2; }
+
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--rose);
+    background: rgba(212,84,138,0.08);
+    border: 1px solid rgba(212,84,138,0.2);
+    padding: 6px 14px; border-radius: 100px;
+    margin-bottom: 28px;
+  }
+  .hero-tag::before { content: '✦'; font-size: 10px; }
+
+  .hero-h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 5.5vw, 72px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    color: var(--plum);
+    margin-bottom: 24px;
+  }
+  .hero-h1 em {
+    font-style: italic;
+    color: var(--rose);
+  }
+
+  .hero-sub {
+    font-size: 17px; line-height: 1.7;
+    color: var(--text-muted); font-weight: 400;
+    max-width: 460px;
+    margin-bottom: 40px;
+  }
+
+  .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--plum); color: white;
+    padding: 15px 32px; border-radius: 100px;
+    font-size: 15px; font-weight: 600;
+    text-decoration: none; display: inline-block;
+    box-shadow: 0 8px 24px rgba(45,27,46,0.25);
+    transition: transform 0.2s, box-shadow 0.2s;
+    letter-spacing: -0.2px;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(45,27,46,0.35); }
+
+  .btn-secondary {
+    color: var(--plum); font-size: 15px; font-weight: 500;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+    border-bottom: 1.5px solid var(--rose); padding-bottom: 2px;
+  }
+
+  .hero-proof {
+    margin-top: 48px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .proof-avatars { display: flex; }
+  .proof-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid var(--cream);
+    margin-left: -10px; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--blush);
+  }
+  .proof-avatar:first-child { margin-left: 0; }
+  .proof-text { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+  .proof-text strong { color: var(--plum); font-weight: 600; }
+
+  /* Hero right — chat preview */
+  .hero-right {
+    position: relative; z-index: 2;
+    display: flex; justify-content: center;
+  }
+
+  .chat-preview {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 24px 80px rgba(45,27,46,0.12), 0 4px 16px rgba(45,27,46,0.06);
+    padding: 28px;
+    max-width: 400px; width: 100%;
+    border: 1px solid rgba(212,84,138,0.1);
+    position: relative;
+  }
+  .chat-preview::before {
+    content: 'MomsNeedAI';
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px; font-weight: 700;
+    color: var(--rose); margin-bottom: 20px;
+    letter-spacing: -0.2px;
+  }
+
+  .chat-msg {
+    display: flex; gap: 10px; margin-bottom: 16px;
+    animation: fadeUp 0.5s ease both;
+  }
+  .chat-msg:nth-child(2) { animation-delay: 0.1s; }
+  .chat-msg:nth-child(3) { animation-delay: 0.2s; }
+  .chat-msg:nth-child(4) { animation-delay: 0.3s; }
+  .chat-msg:nth-child(5) { animation-delay: 0.4s; }
+
+  .chat-msg.user { flex-direction: row-reverse; }
+  .chat-avatar {
+    width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; margin-top: 2px;
+  }
+  .chat-avatar.ai { background: linear-gradient(135deg, #D4548A, #9B59B6); }
+  .chat-avatar.mom { background: var(--blush); }
+  .chat-bubble {
+    max-width: 78%; padding: 10px 14px; border-radius: 16px;
+    font-size: 13px; line-height: 1.55;
+  }
+  .chat-bubble.ai {
+    background: var(--off-white); color: var(--text);
+    border-radius: 4px 16px 16px 16px;
+    border: 1px solid rgba(212,84,138,0.1);
+  }
+  .chat-bubble.user {
+    background: linear-gradient(135deg, #D4548A, #C2448A);
+    color: white; border-radius: 16px 4px 16px 16px;
+  }
+  .chat-bubble strong { font-weight: 600; }
+
+  .typing {
+    display: flex; gap: 4px; align-items: center;
+    padding: 4px 0;
+  }
+  .typing span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--rose); opacity: 0.5;
+    animation: typingBounce 1.2s infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+  .chat-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; color: var(--rose);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin-top: 4px; text-align: right;
+  }
+
+  /* ── STRIP ── */
+  .strip {
+    background: var(--plum);
+    padding: 20px 0; overflow: hidden;
+    position: relative;
+  }
+  .strip-inner {
+    display: flex; gap: 48px; white-space: nowrap;
+    animation: marquee 20s linear infinite;
+  }
+  .strip-item {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px; font-weight: 400; font-style: italic;
+    color: rgba(255,255,255,0.7);
+    flex-shrink: 0;
+  }
+  .strip-dot { color: var(--rose); margin: 0 8px; }
+
+  /* ── FEATURES ── */
+  .features {
+    padding: 100px 48px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--rose);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 900; letter-spacing: -1.5px;
+    color: var(--plum); line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 17px; color: var(--text-muted);
+    line-height: 1.65; max-width: 540px;
+    margin-bottom: 64px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .feature-card {
+    background: white;
+    border-radius: 20px; padding: 32px;
+    border: 1px solid rgba(45,27,46,0.06);
+    box-shadow: 0 4px 16px rgba(45,27,46,0.04);
+    transition: transform 0.25s, box-shadow 0.25s;
+    position: relative; overflow: hidden;
+  }
+  .feature-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--rose), #9B59B6);
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(45,27,46,0.1); }
+  .feature-card:hover::after { opacity: 1; }
+
+  .feature-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: var(--off-white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; margin-bottom: 20px;
+  }
+  .feature-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 700;
+    color: var(--plum); margin-bottom: 10px;
+  }
+  .feature-body {
+    font-size: 14px; color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how {
+    background: var(--plum);
+    padding: 100px 48px;
+    position: relative; overflow: hidden;
+  }
+  .how::before {
+    content: '';
+    position: absolute; top: -200px; right: -200px;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,84,138,0.15) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .how-inner { max-width: 1200px; margin: 0 auto; }
+  .how .section-eyebrow { color: var(--rose); }
+  .how .section-title { color: white; }
+  .how .section-sub { color: rgba(255,255,255,0.6); }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .step-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px; padding: 32px;
+    position: relative;
+  }
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px; font-weight: 900;
+    color: rgba(212,84,138,0.2);
+    line-height: 1; margin-bottom: 16px;
+    letter-spacing: -3px;
+  }
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700;
+    color: white; margin-bottom: 12px;
+  }
+  .step-body { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.65; }
+
+  /* ── PRICING ── */
+  .pricing {
+    padding: 100px 48px;
+    max-width: 1000px; margin: 0 auto;
+    text-align: center;
+  }
+  .pricing-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    margin-top: 56px; text-align: left;
+  }
+  .pricing-card {
+    border-radius: 24px; padding: 40px;
+    border: 1px solid rgba(45,27,46,0.1);
+  }
+  .pricing-card.free { background: white; }
+  .pricing-card.pro {
+    background: var(--plum);
+    border-color: var(--plum);
+    position: relative; overflow: hidden;
+  }
+  .pricing-card.pro::before {
+    content: '';
+    position: absolute; top: -100px; right: -100px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,84,138,0.2) 0%, transparent 65%);
+  }
+  .pricing-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    font-weight: 500; margin-bottom: 16px;
+  }
+  .pricing-card.free .pricing-label { color: var(--text-muted); }
+  .pricing-card.pro .pricing-label { color: var(--rose); }
+
+  .pricing-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px; font-weight: 900; letter-spacing: -2px;
+    line-height: 1; margin-bottom: 6px;
+  }
+  .pricing-card.free .pricing-price { color: var(--plum); }
+  .pricing-card.pro .pricing-price { color: white; }
+  .pricing-per { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; }
+  .pricing-card.pro .pricing-per { color: rgba(255,255,255,0.5); }
+
+  .pricing-features { list-style: none; margin-bottom: 32px; }
+  .pricing-features li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 14px; padding: 8px 0;
+    border-bottom: 1px solid rgba(45,27,46,0.06);
+  }
+  .pricing-card.pro .pricing-features li { border-bottom-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); }
+  .pricing-features li:last-child { border-bottom: none; }
+  .pricing-features .check { color: var(--rose); font-weight: 700; flex-shrink: 0; }
+  .pricing-features .muted { color: rgba(45,27,46,0.3); flex-shrink: 0; }
+
+  .btn-plan-free {
+    display: block; text-align: center; text-decoration: none;
+    padding: 14px; border-radius: 100px;
+    border: 1.5px solid var(--plum);
+    color: var(--plum); font-weight: 600; font-size: 14px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .btn-plan-free:hover { background: var(--plum); color: white; }
+  .btn-plan-pro {
+    display: block; text-align: center; text-decoration: none;
+    padding: 14px; border-radius: 100px;
+    background: var(--rose); color: white;
+    font-weight: 600; font-size: 14px;
+    box-shadow: 0 6px 20px rgba(212,84,138,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; z-index: 1;
+  }
+  .btn-plan-pro:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(212,84,138,0.5); }
+
+  /* ── PROMPTS STRIP ── */
+  .prompts-section {
+    padding: 80px 48px;
+    background: var(--blush);
+  }
+  .prompts-inner { max-width: 1200px; margin: 0 auto; }
+  .prompts-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    margin-top: 48px;
+  }
+  .prompt-card {
+    background: white; border-radius: 16px; padding: 20px;
+    border: 1px solid rgba(212,84,138,0.1);
+    transition: transform 0.2s;
+  }
+  .prompt-card:hover { transform: translateY(-2px); }
+  .prompt-icon { font-size: 24px; margin-bottom: 10px; }
+  .prompt-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px; font-style: italic;
+    color: var(--plum); line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  .prompt-result { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .prompts-cta {
+    text-align: center; margin-top: 40px;
+    font-size: 15px; color: var(--text-muted);
+  }
+  .prompts-cta a { color: var(--rose); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--rose); }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    padding: 100px 48px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; height: 400px;
+    background: radial-gradient(ellipse, rgba(212,84,138,0.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .cta-inner { position: relative; z-index: 1; }
+  .cta-h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 900; letter-spacing: -2px;
+    color: var(--plum); line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .cta-h2 em { font-style: italic; color: var(--rose); }
+  .cta-sub { font-size: 17px; color: var(--text-muted); margin-bottom: 40px; }
+  .cta-note {
+    margin-top: 20px; font-size: 13px;
+    color: var(--text-muted); font-style: italic;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--plum);
+    padding: 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 24px;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 700; color: white;
+  }
+  .footer-logo span { color: var(--rose); }
+  .footer-links { display: flex; gap: 28px; }
+  .footer-links a {
+    font-size: 13px; color: rgba(255,255,255,0.5);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--rose); }
+  .footer-tagline {
+    font-size: 13px; color: rgba(255,255,255,0.3);
+    font-style: italic; font-family: 'Playfair Display', serif;
+    width: 100%;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-5px); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { gap: 16px; }
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; gap: 48px; }
+    .hero-right { display: none; }
+    .features { padding: 72px 24px; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .how { padding: 72px 24px; }
+    .steps { grid-template-columns: 1fr; }
+    .pricing { padding: 72px 24px; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .prompts-section { padding: 60px 24px; }
+    .prompts-grid { grid-template-columns: 1fr 1fr; }
+    .cta-section { padding: 72px 24px; }
+    footer { padding: 36px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Moms<span>Need</span>AI</div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#prompts">Free prompts</a>
+    <a href="#" class="nav-cta">Start free →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Built by a mom · Powered by AI</div>
+    <h1 class="hero-h1">
+      The AI that actually<br>
+      gets <em>mom life.</em>
+    </h1>
+    <p class="hero-sub">
+      Not a generic chatbot. An AI agent that knows your kids, your schedule, your dietary chaos, and your career goals — and gives you answers built around your actual life.
+    </p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Start free — no card needed</a>
+      <a href="#how" class="btn-secondary">See how it works →</a>
+    </div>
+    <div class="hero-proof">
+      <div class="proof-avatars">
+        <div class="proof-avatar">👩</div>
+        <div class="proof-avatar">👩🏽</div>
+        <div class="proof-avatar">👩🏻</div>
+        <div class="proof-avatar">👩🏾</div>
+      </div>
+      <div class="proof-text">
+        <strong>Join moms</strong> reclaiming their time with AI<br>
+        Free to start · Pro at $12/mo
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="chat-preview">
+      <div class="chat-msg">
+        <div class="chat-avatar mom">👩</div>
+        <div class="chat-bubble user">I need a 5-day meal plan my picky 5 year old will actually eat and that I can make in 30 min or less</div>
+      </div>
+      <div class="chat-msg">
+        <div class="chat-avatar ai">✨</div>
+        <div class="chat-bubble ai">
+          <strong>Here's your week, mama:</strong><br><br>
+          Mon · Cheesy pasta + hidden veggie sauce<br>
+          Tue · Chicken quesadillas + cucumber<br>
+          Wed · Mini turkey meatballs + rice<br>
+          Thu · Grilled cheese + tomato soup<br>
+          Fri · Pizza night (you earned it) 🍕<br><br>
+          All under 30 min. Grocery list ready?
+        </div>
+      </div>
+      <div class="chat-msg">
+        <div class="chat-avatar mom">👩</div>
+        <div class="chat-bubble user">Yes please! Also can you draft an email to his teacher about the Thursday pickup change</div>
+      </div>
+      <div class="chat-msg">
+        <div class="chat-avatar ai">✨</div>
+        <div class="chat-bubble ai">
+          <div class="typing"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+      <div class="chat-tag">momsneedai.com</div>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-inner">
+    <span class="strip-item">Meal planning <span class="strip-dot">✦</span></span>
+    <span class="strip-item">Mental load dump <span class="strip-dot">✦</span></span>
+    <span class="strip-item">School emails drafted <span class="strip-dot">✦</span></span>
+    <span class="strip-item">Career growth <span class="strip-dot">✦</span></span>
+    <span class="strip-item">Party planning <span class="strip-dot">✦</span></span>
+    <span class="strip-item">Side income ideas <span class="strip-dot">✦</span></span>
+    <span class="strip-item">Weekly schedule <span class="strip-dot">✦</span></span>
+    <span class="strip-item">Self-care moments <span class="strip-dot">✦</span></span>
+    <span class="strip-item">Meal planning <span class="strip-dot">✦</span></span>
+    <span class="strip-item">Mental load dump <span class="strip-dot">✦</span></span>
+    <span class="strip-item">School emails drafted <span class="strip-dot">✦</span></span>
+    <span class="strip-item">Career growth <span class="strip-dot">✦</span></span>
+    <span class="strip-item">Party planning <span class="strip-dot">✦</span></span>
+    <span class="strip-item">Side income ideas <span class="strip-dot">✦</span></span>
+    <span class="strip-item">Weekly schedule <span class="strip-dot">✦</span></span>
+    <span class="strip-item">Self-care moments <span class="strip-dot">✦</span></span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-eyebrow">What MomsNeedAI does</div>
+  <h2 class="section-title">Everything on your<br>plate, handled.</h2>
+  <p class="section-sub">MomsNeedAI knows your kids' ages, dietary needs, your work schedule, your goals — and gives you answers that actually fit your life. Not a mom in general. You.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <div class="feature-title">Mental load, cleared</div>
+      <div class="feature-body">Brain dump your entire week and get it organized, prioritized, and scheduled in under a minute. Stop carrying it all in your head.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🍽</div>
+      <div class="feature-title">Meal plans that work</div>
+      <div class="feature-body">Built around your dietary restrictions, your kids' preferences, and what you actually have time to cook. With grocery lists included.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✍️</div>
+      <div class="feature-title">Drafts in your voice</div>
+      <div class="feature-body">School emails, texts to other parents, work messages — written the way you'd write them, in seconds. Never stare at a blank screen again.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💼</div>
+      <div class="feature-title">Career that keeps growing</div>
+      <div class="feature-body">Resume help, side income ideas, career pivots — advice built around the reality that you have a full life outside of work.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎉</div>
+      <div class="feature-title">Events planned, stress-free</div>
+      <div class="feature-body">Birthday parties, holiday prep, travel with kids, gift ideas — MomsNeedAI walks you through every detail so nothing falls through the cracks.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌿</div>
+      <div class="feature-title">Actually for you too</div>
+      <div class="feature-body">Self-care planning, how to say no, finding 20 minutes for yourself — because you matter as much as everything else on your list.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="how-inner">
+    <div class="section-eyebrow">How it works</div>
+    <h2 class="section-title" style="color:white">Ready in 2 minutes.<br>Useful for life.</h2>
+    <p class="section-sub">A quick onboarding that makes every response feel like it was made for you — because it was.</p>
+
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-title">Tell us about your life</div>
+        <div class="step-body">Kids' ages and quirks. Dietary needs. Work schedule. Pets. Goals. A 2-minute setup that changes every answer from generic to genuinely yours.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-title">Ask anything</div>
+        <div class="step-body">Meal plans, school emails, party checklists, career questions, side income ideas, or just "help me figure out this week." MomsNeedAI handles all of it.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-title">Get your time back</div>
+        <div class="step-body">Every answer is specific to your family. Not a mom in general — you. That's the difference between a chatbot and an AI that actually helps.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-eyebrow">Simple pricing</div>
+  <h2 class="section-title">Free to start.<br>Worth every penny to upgrade.</h2>
+
+  <div class="pricing-grid">
+    <div class="pricing-card free">
+      <div class="pricing-label">Free — always</div>
+      <div class="pricing-price">$0</div>
+      <div class="pricing-per">forever, no credit card</div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Full personalized onboarding</li>
+        <li><span class="check">✓</span> 5 AI conversations per day</li>
+        <li><span class="check">✓</span> All core features</li>
+        <li><span class="check">✓</span> Meal planning (3 days)</li>
+        <li><span class="check">✓</span> Draft emails & texts</li>
+        <li><span class="muted">—</span> <span style="color:#ccc">Memory across sessions</span></li>
+        <li><span class="muted">—</span> <span style="color:#ccc">Unlimited conversations</span></li>
+        <li><span class="muted">—</span> <span style="color:#ccc">Weekly planner export</span></li>
+      </ul>
+      <a href="#" class="btn-plan-free">Get started free</a>
+    </div>
+
+    <div class="pricing-card pro">
+      <div class="pricing-label">MomsNeedAI Pro</div>
+      <div class="pricing-price" style="color:white">$12</div>
+      <div class="pricing-per">/month · 7-day free trial</div>
+      <ul class="pricing-features" style="color:rgba(255,255,255,0.8)">
+        <li><span class="check">✓</span> Everything in free</li>
+        <li><span class="check">✓</span> Unlimited conversations</li>
+        <li><span class="check">✓</span> Memory — AI remembers you</li>
+        <li><span class="check">✓</span> Full week meal plan + grocery list</li>
+        <li><span class="check">✓</span> Weekly planner PDF export</li>
+        <li><span class="check">✓</span> Monthly seasonal prompt packs</li>
+        <li><span class="check">✓</span> Priority response speed</li>
+        <li><span class="check">✓</span> Cancel anytime, instantly</li>
+      </ul>
+      <a href="#" class="btn-plan-pro">Start 7-day free trial →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FREE PROMPTS -->
+<section class="prompts-section" id="prompts">
+  <div class="prompts-inner">
+    <div class="section-eyebrow">Free prompt packs on Gumroad</div>
+    <h2 class="section-title">Not sure yet?<br>Start with free prompts.</h2>
+    <p class="section-sub">Download our free prompt packs — 100 AI prompts written specifically for moms, organized by every part of your life.</p>
+
+    <div class="prompts-grid">
+      <div class="prompt-card">
+        <div class="prompt-icon">🗓</div>
+        <div class="prompt-text">"Plan my entire week including school pickups and a work deadline on Thursday"</div>
+        <div class="prompt-result">→ Full schedule with buffer time built in</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-icon">🍽</div>
+        <div class="prompt-text">"5 dinners my picky eater won't fight me on, all under 30 minutes"</div>
+        <div class="prompt-result">→ Real meals with hidden veggie tricks</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-icon">✍️</div>
+        <div class="prompt-text">"Draft a kind but firm email to my child's teacher about a grading concern"</div>
+        <div class="prompt-result">→ Professional, warm, done in seconds</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-icon">💰</div>
+        <div class="prompt-text">"3 realistic ways I can make $500/month without leaving my job or my kids"</div>
+        <div class="prompt-result">→ Actual side income ideas for your life</div>
+      </div>
+    </div>
+    <div class="prompts-cta">
+      Download 100 free mom AI prompts → <a href="#">Get the free pack on Gumroad</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-h2">You carry enough.<br>Let <em>AI carry some of it.</em></h2>
+    <p class="cta-sub">Free to start. Personalized to your life. Built by a mom who needed this too.</p>
+    <a href="#" class="btn-primary" style="display:inline-block;font-size:16px;padding:16px 40px">Start free — no card needed →</a>
+    <p class="cta-note">5 free conversations every day, forever. Upgrade when you're ready.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Moms<span>Need</span>AI</div>
+  <div class="footer-links">
+    <a href="#">Instagram</a>
+    <a href="#">Free prompts</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="footer-tagline">Built by a working Miami mom. Powered by Claude AI. Made with love and a lot of coffee. ☕</div>
+</footer>
+
+</body>
+</html>
